@@ -25,7 +25,7 @@
 #define PORT 1234
 
 /* Puffer f√ºr eingehende Nachrichten */
-#define RCVBUFSIZE 1024
+#define RCVBUFSIZE 10024
 
 #ifdef _WIN32
    static void echo(SOCKET);
@@ -44,16 +44,27 @@ static void echo(int client_socket)
 #endif
 {
     char echo_buffer[RCVBUFSIZE];
-    int recv_size;
+    int recv_size, written;
     time_t zeit;
-
+	FILE *fh;	
+	char *path = "/home/boerde/Pictures/test.jpg";
     if((recv_size =
-            recv(client_socket, echo_buffer, RCVBUFSIZE,0)) < 0)
+            recv(client_socket, echo_buffer, RCVBUFSIZE,MSG_WAITALL)) < 0)
         error_exit("Fehler bei recv()");
-    echo_buffer[recv_size] = '\0';
     time(&zeit);
-    printf("Nachrichten vom Client : %s \t%s",
-            echo_buffer, ctime(&zeit));
+    printf("Pic received: %i\n", recv_size);
+
+    fh = fopen(path, "w+");
+    
+    printf("Datei geˆffnet: %i\n", fh);
+
+    fwrite(&echo_buffer, sizeof(char), recv_size, fh);
+    printf("Datei beschrieben: %i\n", written); 
+
+    fclose(fh);
+    
+    printf("Nachrichten vom Client : \t%s",
+            ctime(&zeit));
 }
 
 /* Die Funktion gibt den aufgetretenen Fehler aus und
