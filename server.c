@@ -66,6 +66,7 @@ static void echo(int client_socket)
     
     printf("Nachrichten vom Client : \t%s",
             ctime(&zeit));
+    free(echo_buffer);
 }
 
 /* Die Funktion gibt den aufgetretenen Fehler aus und
@@ -147,6 +148,7 @@ int main( int argc, char *argv[]) {
         closesocket(fd);
 #else
         close(fd);
+	free(
 #endif
     }
     return EXIT_SUCCESS;
