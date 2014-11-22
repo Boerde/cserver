@@ -43,11 +43,12 @@ static void echo(SOCKET client_socket)
 static void echo(int client_socket)
 #endif
 {
-    char echo_buffer[RCVBUFSIZE];
+    char *echo_buffer;
     int recv_size, written;
     time_t zeit;
 	FILE *fh;	
 	char *path = "/home/boerde/Pictures/test.jpg";
+	echo_buffer = (char *) malloc(sizeof(char) * RCVBUFSIZE);
     if((recv_size =
             recv(client_socket, echo_buffer, RCVBUFSIZE,MSG_WAITALL)) < 0)
         error_exit("Fehler bei recv()");
@@ -58,7 +59,7 @@ static void echo(int client_socket)
     
     printf("Datei geöffnet: %i\n", fh);
 
-    written = fwrite(&echo_buffer, sizeof(char), recv_size, fh);
+    written = fwrite(echo_buffer, sizeof(char), recv_size, fh);
     printf("Datei beschrieben: %i\n", written); 
 
     fclose(fh);
