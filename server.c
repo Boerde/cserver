@@ -25,7 +25,7 @@
 #define PORT 1234
 
 /* Puffer fÃ¼r eingehende Nachrichten */
-#define RCVBUFSIZE 10024
+#define RCVBUFSIZE 10000024
 
 #ifdef _WIN32
    static void echo(SOCKET);
@@ -58,7 +58,7 @@ static void echo(int client_socket)
     
     printf("Datei geöffnet: %i\n", fh);
 
-    fwrite(&echo_buffer, sizeof(char), recv_size, fh);
+    written = fwrite(&echo_buffer, sizeof(char), recv_size, fh);
     printf("Datei beschrieben: %i\n", written); 
 
     fclose(fh);
